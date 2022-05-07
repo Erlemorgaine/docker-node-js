@@ -1,0 +1,15 @@
+version: "3"
+services:
+  web:
+    build: . # This tells the yml to look for the Dockerfile in the current directory
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/home/node/src # Links current directory to container map. It basically creates a mount, so it can reflect directly what we changes in our files
+      - /home/node/code/node_modules # This is basically saying that we want to exclude node_modules
+    links:
+      - my-database # This lists the dependencies that need to be build first because our app depends on them
+    environment:
+      MONGO_CONNECTION_STRING: mongodb://my-database:27017
+  my-database:
+    image: mongo:3 # This gets the image off the docker hub and starts the container
